@@ -8,8 +8,8 @@ module.exports = function (source, map) {
         this.cacheable();
     }
 
-    var cssLocalPlugins = this.cssLocals && this.cssLocals.length || require('./css-locals-transition');
-
+    var cssLocalPlugins = this.options && this.options.cssLocals && this.options.cssLocals.length
+        ? this.options.cssLocals : [require('./css-locals-transition')];
     var lines = source.split('\n');
 
     var css = "";

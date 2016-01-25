@@ -44,6 +44,7 @@ describe("css-locals-transitions", function () {
             expect(stuff['@enterTimeout']).toBe(4000);
         });
     });
+
     it('animation with duration', function () {
         var stuff = {
             enter: 'enter'
