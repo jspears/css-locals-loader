@@ -31,7 +31,7 @@ module.exports = function (locals) {
             var prop = classMap[selectorName];
 
             function updateAutoProperty(c, decl, decend) {
-                var heightKey = '@' + camel(decl + '-' + prop);
+                var heightKey = '@' + camel(prop + '-' + decl);
                 var found = false;
                 c.walkDecls(decl, function (h) {
                     if (h.value === 'auto') {

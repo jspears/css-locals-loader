@@ -16,7 +16,7 @@ describe('css-locals-dimension', function () {
             }
 
        `).then(function () {
-            expect(stuff['@heightEnter']).toBe(true);
+            expect(stuff['@enterHeight']).toBe(true);
         });
     });
     it('should extract height by property', function () {
@@ -30,7 +30,7 @@ describe('css-locals-dimension', function () {
             }
 
        `).then(function () {
-            expect(stuff['@heightEnter']).toBe(true);
+            expect(stuff['@enterHeight']).toBe(true);
         });
     });
 
@@ -49,7 +49,7 @@ describe('css-locals-dimension', function () {
             }
 
        `).then(function () {
-            expect(stuff['@heightEnter']).toBe(true);
+            expect(stuff['@enterHeight']).toBe(true);
         });
     });
 
@@ -68,7 +68,7 @@ describe('css-locals-dimension', function () {
             }
 
        `).then(function () {
-            expect(stuff['@heightEnter']).toBe(true);
+            expect(stuff['@enterHeight']).toBe(true);
         });
     });
     it('should work with realish css', function () {
@@ -89,7 +89,7 @@ describe('css-locals-dimension', function () {
   transition: max-height 1.5s ease, opacity 1.5s ease;
   max-height: auto;
 } `).then(function () {
-            expect(stuff['@maxHeightEnter']).toBe(true);
+            expect(stuff['@enterMaxHeight']).toBe(true);
         });
     });
 });
