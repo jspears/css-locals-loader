@@ -1,0 +1,33 @@
+{
+  "name": "css-locals-loader",
+  "version": "1.0.0",
+  "description": "Webpack loader to add more locals to your css modules. ",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "mocha test/*-test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jspears/css-locals-loader.git"
+  },
+  "keywords": [
+    "css-loader",
+    "locals",
+    "css-modules",
+    "webpack"
+  ],
+  "author": "Justin Spears <speajus@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jspears/css-locals-loader/issues"
+  },
+  "homepage": "https://github.com/jspears/css-locals-loader#readme",
+  "devDependencies": {
+    "expect": "^1.13.4",
+    "mocha": "^2.3.4",
+    "postcss": "^5.0.14"
+  }
+}
