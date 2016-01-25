@@ -8,17 +8,24 @@ describe('locals-load', function () {
         expect(f.length).toBe(1);
         expect(f[0].name).toBe('cssLocalsTransition$postCssPlugin');
     });
-    it('should return test/css-locals-junk', function () {
-        var f = localsLoad('../../../test/css-locals-junk.js', {});
-        expect(f.length).toBe(1);
-        expect(f[0].name).toBe('cssLocalsJunk$return');
-    });
+
 
     it('should parse strings', function () {
-        var f = localsLoad('../../../test/css-locals-junk.js, css-locals-transition', {});
+        var f = localsLoad('css-locals-dimension, css-locals-transition', {});
         expect(f.length).toBe(2);
-        expect(f[0].name).toBe('cssLocalsJunk$return');
+        expect(f[0].name).toBe('extractDimensions$return');
         expect(f[1].name).toBe('cssLocalsTransition$postCssPlugin');
-
+    });
+    it('should use an array', function () {
+        var f = localsLoad(['css-locals-dimension', 'css-locals-transition'], {});
+        expect(f.length).toBe(2);
+        expect(f[0].name).toBe('extractDimensions$return');
+        expect(f[1].name).toBe('cssLocalsTransition$postCssPlugin');
+    });
+    it('should allow mixed array', function () {
+        var f = localsLoad([require('../src/css-locals-dimension'), 'css-locals-transition'], {});
+        expect(f.length).toBe(2);
+        expect(f[0].name).toBe('extractDimensions$return');
+        expect(f[1].name).toBe('cssLocalsTransition$postCssPlugin');
     });
 });

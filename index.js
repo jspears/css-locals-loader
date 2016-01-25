@@ -1,1 +1,1 @@
-module.exports = require('./src/css-locals-loader');
+module.exports = require('./src/loader');

@@ -2,10 +2,10 @@
 
 function loadPlugin(plugin) {
     if (typeof plugin === 'string') {
-        if (plugin === 'css-locals-transition') {
-            return require('./css-locals-transition')(this);
+        if (/^css-locals-/.test(plugin)) {
+            return require('./' + plugin)(this);
         }
-        return loadPlugin.call(this, require.main.require(plugin));
+        return loadPlugin.call(this, require(plugin));
     }
     return plugin(this);
 }
