@@ -5,9 +5,17 @@ function isDimension(prop) {
     return /(?:(max|min)-)?(height|width)/.test(prop);
 }
 
-module.exports = function (locals) {
+var DEF_SELECTORS = ['enter', 'enterActive', 'appear', 'appearActive', 'leave', 'leaveActive'];
 
-    var classMap = ['enter', 'enterActive', 'appear', 'appearActive', 'leave', 'leaveActive'].reduce(function (ret, key) {
+module.exports = function (locals, opts) {
+    opts = opts || utils.EMPTY_OBJ;
+    var localOpts = opts['dimension'] || utils.EMPTY_OBJ;
+
+    var updateLocal = localOpts.updateLocal || opts.localUpdate || utils.localUpdate;
+
+    var selectors = localOpts.selectors || opts.selectors || DEF_SELECTORS;
+
+    var classMap = selectors.reduce(function (ret, key) {
         if (key in locals) {
             ret[locals[key]] = key;
         }
@@ -50,7 +58,7 @@ module.exports = function (locals) {
             s.walkDecls(/^transition.*/, function (node) {
                 trans[node.prop](node.value);
             });
-            trans.property().forEach(function (propname, i) {
+            trans.property().forEach(function (propname) {
                 if (!isDimension(propname)) {
                     return;
                 }
@@ -60,21 +68,22 @@ module.exports = function (locals) {
                     if (node.value === 'auto') {
                         //from auto.
                         found = true;
-                        locals['@' + utils.camel(prop + '-' + propname)]  = trans.description().join(',');
+                        updateLocal(locals, prop, propname, trans.description().join(','));
                     }
                 });
 
                 var activeProp = locals[prop + 'Active'];
                 //so its a to auto.
-                if (!found && activeProp)
-                    css.walkRules('.'+activeProp, function (activeRule) {
+                if (!found && activeProp) {
+                    css.walkRules('.' + activeProp, function (activeRule) {
                         activeRule.walkDecls(propname, function (d) {
                             if (d.value === 'auto') {
                                 //to auto
-                                locals['@' + utils.camel(prop + '-active-' + propname)] = trans.description().join(',');
+                                updateLocal(locals, prop + '-active', propname, trans.description().join(','));
                             }
                         });
                     });
+                }
             });
 
         });

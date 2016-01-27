@@ -4,7 +4,7 @@ A webpack plugin to extract more local information out of the css, to expose via
 
 ##Installation
 ```
- $ npm install css-locals-loader
+ $ npm install css-locals-loader --save-dev
  
 ```
 
@@ -44,7 +44,7 @@ To add your own locals munger the api is
 
 ```
 //yourplugin.js
-
+//locals -> are the current locals, you can/should modify this.
 module.exports = function yourLocals(locals){
   
    return function(css, result){
@@ -64,7 +64,7 @@ var ExtractTextPlugin = require('extract-text-webpack-plugin');
 module.exports = {
     ...
     //optional array of plugins. If defined, you need to add the default plugin back in if your want to use it.
-    cssLocals:['your-plugin', 'css-locals-transition']
+    cssLocals:[require('./your-plugin'), 'css-locals-transition']
     module: {
         loaders: [
             {

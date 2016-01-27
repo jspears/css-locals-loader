@@ -22,6 +22,26 @@ function Transition(trans) {
     var duration = [];
     var delay = [];
     var timingFunction = [];
+    /**
+     * Returns an array of transition css objects.
+     * @returns {Array}
+     */
+    this.toJSON = function () {
+        return property.map(function (transitionProperty, i) {
+            var obj = {
+                transitionProperty: transitionProperty,
+                transitionDuration: utils.toNiceTimeUnits(utils.repeatAt(i, duration, 0))
+            }, tf, d;
+
+            if ((tf = utils.repeatAt(i, timingFunction))) {
+                obj.transitionTimingFunction = tf;
+            }
+            if ((d = utils.repeatAt(i, delay))) {
+                obj.transitionDelay = utils.toNiceTimeUnits(d);
+            }
+            return obj;
+        });
+    };
 
     this.description = function description(filter) {
         return property.filter(utils.filter(filter)).map(function (prop, i) {
@@ -129,11 +149,30 @@ function Transition(trans) {
         return duration.concat();
     };
 
+    this.fromJSON = Transition.fromJSON;
 
     if (trans) {
         this.transition(trans);
     }
 }
 Transition.defaultTimingFunction = 'ease';
+
+Transition.fromJSON = function (obj) {
+    if (obj == null) return;
+
+    obj = Array.isArray(obj) ? obj : [obj];
+
+    var transition = this instanceof Transition ? this : new Transition();
+
+    obj.forEach(function (o) {
+        Object.keys(o).forEach(function (key) {
+            var f = key.replace(/^transition(.)/, function (match, letter) {
+                return letter.toLowerCase();
+            });
+            transition[f](o[key]);
+        });
+    });
+    return transition;
+};
 
 module.exports = Transition;

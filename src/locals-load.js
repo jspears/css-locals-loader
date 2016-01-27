@@ -1,28 +1,30 @@
 "use strict";
 
-function loadPlugin(plugin) {
+function loadPlugin(plugin, locals, opts) {
     if (typeof plugin === 'string') {
         if (/^css-locals-/.test(plugin)) {
-            return require('./' + plugin)(this);
+            return require('./' + plugin)(locals, opts);
         }
-        return loadPlugin.call(this, require(plugin));
+        return loadPlugin(require(plugin), locals, opts);
     }
-    return plugin(this);
+    return plugin(locals, opts);
 }
 
-function localsLoad(plugin, locals) {
+function localsLoad(plugin, locals, opts) {
     if (!plugin) {
         return [];
     }
     if (typeof plugin === 'string') {
 
-        return localsLoad(plugin.split(/,\s*/), locals);
+        return localsLoad(plugin.split(/,\s*/), locals, opts);
     }
     if (!Array.isArray(plugin)) {
-        return localsLoad([plugin], locals);
+        return localsLoad([plugin], locals, opts);
     }
 
-    return plugin.map(loadPlugin, locals);
+    return plugin.map(function (plug) {
+        return loadPlugin(plug, locals, opts);
+    });
 
 }
 

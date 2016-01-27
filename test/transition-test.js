@@ -33,12 +33,27 @@ describe('transition', function () {
         var r = (transition('height 2s, max-width 3s ease-in 1s, opacity .1s 1s').delay(333));
 
         expect(r.timeout()).toBe(3333);
-        expect(''+r).toBe('transition: height 2s ease 333, max-width 3s ease-in 333, opacity 100 ease 333');
+        expect('' + r).toBe('transition: height 2s ease 333, max-width 3s ease-in 333, opacity 100 ease 333');
     });
     it('.wrong order', function () {
         var r = transition().delay(333).duration('111ms, 2s').property('stuff, more, other').timingFunction('cubic, linear');
 
-        expect(''+r).toBe('transition: stuff 111 cubic 333, more 2s linear 333, other 111 cubic 333');
+        expect('' + r).toBe('transition: stuff 111 cubic 333, more 2s linear 333, other 111 cubic 333');
         expect(r.timeout()).toBe(2333);
+    });
+
+    it('.toJSON -> #fromJSON', function () {
+        var r = transition().delay(333).duration(100).property('name,age');
+        var j = transition.fromJSON(r.toJSON());
+        expect('' + r).toBe(j + '');
+    });
+
+    it('.toJSON -> .fromJSON', function () {
+        var r1 = transition().delay(333).duration(100).property('name,age');
+
+        var str = r1+'';
+        r1.fromJSON(r1.toJSON());
+
+        expect('' + r1).toBe(str);
     });
 });

@@ -3,6 +3,18 @@
 var max = Function.apply.bind(Math.max, Math);
 var list = require('postcss').list;
 var api = {
+        EMPTY_OBJ: Object.freeze({}),
+        /**
+         * Default locals update function.
+         * @param locals Object - The object to change.
+         * @param prop - {string} - The name of the prop (usually the className).
+         * @param propname -{string} - The property that is being insepected.
+         * @param declartion -{*} - The css properyt declaration value.
+         * @returns {*}
+         */
+        localUpdate(locals, prop, propname, declartion) {
+            return locals['@' + api.camel(prop + '-' + propname)] = declartion;
+        },
         /**
          * Basically Math.max, but it accepts an array of numbers.
          */
@@ -29,11 +41,11 @@ var api = {
             if (val === 0) {
                 return val;
             }
-            var nval = ('' + (val / 1000)).replace(/^0+?/, '');
+            var nval = ('' + (val / 1000)).replace(/^0{1,}/, '');
             if ((nval.length + 1) < ('' + val).length) {
                 return nval + 's';
             }
-            return (''+val).length === (''+oval).length ? oval : val;
+            return ('' + val).length === ('' + oval).length ? oval : val;
         },
         replaceMillis(to, value) {
             if (typeof value === 'number') {
