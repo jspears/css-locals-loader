@@ -47,11 +47,10 @@ function Animation(anim) {
     this.description = function description(filter) {
         return name.filter(pu.filter(filter)).map(function (prop, i) {
             //    duration | timing-function | delay | iteration-count | direction | fill-mode | play-state | name
-
             return [
-                pu.repeatAt(i, duration, Animation.defaultDuration),
+                pu.toNiceTimeUnits(pu.repeatAt(i, duration, Animation.defaultDuration)),
                 pu.repeatAt(i, timingFunction, Animation.defaultTimingFunction),
-                pu.repeatAt(i, delay, Animation.defaultDelay),
+                pu.toNiceTimeUnits(pu.repeatAt(i, delay, Animation.defaultDelay)),
                 pu.repeatAt(i, iterationCount, Animation.defaultIterationCount),
                 pu.repeatAt(i, direction, Animation.defaultDirection),
                 pu.repeatAt(i, fillMode, Animation.defaultFillMode),

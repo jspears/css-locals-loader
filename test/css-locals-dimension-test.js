@@ -16,7 +16,7 @@ describe('css-locals-dimension', function () {
             }
 
        `).then(function () {
-            expect(stuff['@enterHeight']).toBe('height 2000 ease');
+            expect(stuff['@enterHeight']).toBe('height 2s ease');
         });
     });
     it('should extract height by property', function () {
@@ -49,7 +49,7 @@ describe('css-locals-dimension', function () {
             }
 
        `).then(function () {
-            expect(stuff['@enterActiveHeight']).toBe('height 2000 ease');
+            expect(stuff['@enterActiveHeight']).toBe('height 2s ease,opacity 1s ease-in-out');
         });
     });
 
@@ -71,7 +71,7 @@ describe('css-locals-dimension', function () {
             }
 
        `).then(function () {
-            expect(stuff['@enterActiveHeight']).toBe("height 1000 ease-in 2000");
+            expect(stuff['@enterActiveHeight']).toBe("opacity 1s ease-in 2s,height 1s ease-in 2s");
         });
     });
     it('should work with realish css', function () {
@@ -92,7 +92,7 @@ describe('css-locals-dimension', function () {
   transition: max-height 1.5s ease, opacity 1.5s ease;
   max-height: auto;
 } `).then(function () {
-            expect(stuff['@enterActiveMaxHeight']).toBe('max-height 1500 ease');
+            expect(stuff['@enterActiveMaxHeight']).toBe('max-height 1500 ease,opacity 1500 ease');
         });
     });
 
@@ -113,7 +113,7 @@ describe('css-locals-dimension', function () {
   opacity: 1;
   max-height: auto;
 } `).then(function () {
-            expect(stuff['@enterActiveMaxHeight']).toBe('max-height 1500 ease');
+            expect(stuff['@enterActiveMaxHeight']).toBe('max-height 1500 ease,opacity 1500 ease');
         });
     })
 });

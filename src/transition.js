@@ -28,7 +28,7 @@ function Transition(trans) {
 
             var def = [
                 prop,
-                utils.repeatAt(i, duration, 0)
+                utils.toNiceTimeUnits(utils.repeatAt(i, duration, 0))
             ];
 
             var tf = utils.repeatAt(i, timingFunction);
@@ -39,7 +39,7 @@ function Transition(trans) {
 
             var d = utils.repeatAt(i, delay);
             if (d != null && d != 0) {
-                def.push(d);
+                def.push(utils.toNiceTimeUnits(d));
             }
             return def.join(' ');
         });

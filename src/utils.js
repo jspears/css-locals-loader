@@ -33,7 +33,7 @@ var api = {
             if ((nval.length + 1) < ('' + val).length) {
                 return nval + 's';
             }
-            return val;
+            return (''+val).length === (''+oval).length ? oval : val;
         },
         replaceMillis(to, value) {
             if (typeof value === 'number') {

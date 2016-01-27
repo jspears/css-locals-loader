@@ -23,15 +23,17 @@ describe("utils", function () {
             '1000': '1s',
             '100': 100,
             '10': 10,
-            '100ms':100,
+            '100ms': 100,
             '.0010s': 1,
-            '3000':'3s',
-            '30.00':30,
-            '30.00s':'30s'
+            '3000': '3s',
+            //if the transformed length is the same as the original length return the original.
+            '3.4s': '3.4s',
+            '30.00': 30,
+            '30.00s': '30s'
         };
         Object.keys(map).forEach(function (key) {
             it('should convert to ' + key + ' to ' + map[key], function () {
-                expect(utils.toNiceTimeUnits(key)).toBe(map[key]);
+                expect(utils.toNiceTimeUnits(key) + '').toBe('' + map[key]);
             });
         })
     });

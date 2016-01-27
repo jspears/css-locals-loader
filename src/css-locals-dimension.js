@@ -50,21 +50,18 @@ module.exports = function (locals) {
             s.walkDecls(/^transition.*/, function (node) {
                 trans[node.prop](node.value);
             });
-            var desc = trans.description();
             trans.property().forEach(function (propname, i) {
                 if (!/(?:(max|min)-)?(height|width)/.test(propname)) {
                     return;
 
                 }
-                console.log('prop', propname, desc[i]);
-
                 var found = false;
 
                 s.walkDecls(propname, function (node) {
                     if (node.value === 'auto') {
                         //from auto.
                         found = true;
-                        locals['@' + utils.camel(prop + '-' + propname)] = desc[i];
+                        locals['@' + utils.camel(prop + '-' + propname)]  = trans.description().join(',');
                     }
                 });
                 var activeProp = locals[prop + 'Active'];
@@ -73,7 +70,7 @@ module.exports = function (locals) {
                         activeRule.walkDecls(propname, function (d) {
                             if (d.value === 'auto') {
                                 //to auto
-                                locals['@' + utils.camel(prop + '-active-' + propname)] = desc[i];
+                                locals['@' + utils.camel(prop + '-active-' + propname)] = trans.description().join(',');
                             }
                         });
                     });
