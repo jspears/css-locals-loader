@@ -1,6 +1,11 @@
 CSS Locals Loader
 ===
 A webpack plugin to extract more local information out of the css, to expose via css modules.
+Currently it can expose height:auto, width:auto along with transition timeouts.   Why would you need
+this?  Well, browsers don't transition to (hiehgt|width)auto, and so you have to either handle it yourself
+but this should let other libraries be written on top, that take care of that for you.
+
+
 
 ##Installation
 ```
@@ -39,6 +44,21 @@ module.exports = config;
 
 
 ```
+## Usage
+Once you have webpack all straightened out, in your client side JS.
+
+```js
+var fadeIn = require('./less/fadeIn.less');
+//fadeIn now has @enterTimeout.
+{
+  "enter": "1234_fadeIn_enter",
+  "@enterTimeout": 4000
+}
+
+```
+
+
+
 ##Plugin API
 To add your own locals munger the api is
 
@@ -81,3 +101,4 @@ module.exports = {
 
 }
 ```
+

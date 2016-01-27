@@ -9,7 +9,7 @@ module.exports = function (source, map) {
         this.cacheable();
     }
 
-    var query = typeof query === 'string' ?  loaderUtils.parseQuery(this.query) : this.query;
+    var query = typeof this.query === 'string' ?  loaderUtils.parseQuery(this.query) : this.query;
 
     var cssLocalPlugins = this.options && this.options.cssLocals && this.options.cssLocals.length
         ? this.options.cssLocals : [require('./css-locals-transition')];

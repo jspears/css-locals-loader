@@ -50,6 +50,7 @@ describe('css-locals-dimension', function () {
             }
 
        `).then(function () {
+            console.log(JSON.stringify(stuff, null,2));
             expect(stuff['@enterActiveHeight']).toBe('height 2s ease,opacity 1s ease-in-out');
         });
     });
