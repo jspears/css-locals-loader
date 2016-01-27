@@ -19,7 +19,13 @@ function localsLoad(plugin, locals, opts) {
         return localsLoad(plugin.split(/,\s*/), locals, opts);
     }
     if (!Array.isArray(plugin)) {
-        return localsLoad([plugin], locals, opts);
+        if (typeof plugin === 'object') {
+            return Object.keys(plugin).map(function (plug) {
+                return loadPlugin(plug, locals, plugin[plug]);
+            });
+        } else {
+            plugin = [plugin];
+        }
     }
 
     return plugin.map(function (plug) {
