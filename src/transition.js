@@ -126,7 +126,7 @@ function Transition(trans) {
             utils.replaceMillis(duration, durations);
             return this;
         }
-        return delay.concat();
+        return duration.concat();
     };
 
 
