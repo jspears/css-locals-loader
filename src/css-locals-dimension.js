@@ -51,9 +51,8 @@ module.exports = function (locals) {
                 trans[node.prop](node.value);
             });
             trans.property().forEach(function (propname, i) {
-                if (!/(?:(max|min)-)?(height|width)/.test(propname)) {
+                if (!isDimension(propname)) {
                     return;
-
                 }
                 var found = false;
 
@@ -64,7 +63,9 @@ module.exports = function (locals) {
                         locals['@' + utils.camel(prop + '-' + propname)]  = trans.description().join(',');
                     }
                 });
+
                 var activeProp = locals[prop + 'Active'];
+                //so its a to auto.
                 if (!found && activeProp)
                     css.walkRules('.'+activeProp, function (activeRule) {
                         activeRule.walkDecls(propname, function (d) {

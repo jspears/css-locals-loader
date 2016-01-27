@@ -26,6 +26,7 @@ describe("utils", function () {
             '100ms': 100,
             '.0010s': 1,
             '3000': '3s',
+            '21232.22ms':21232.22,
             //if the transformed length is the same as the original length return the original.
             '3.4s': '3.4s',
             '30.00': 30,
