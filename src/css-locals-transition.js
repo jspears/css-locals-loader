@@ -38,5 +38,6 @@ module.exports = function cssLocalsTransition(locals, selectors) {
                 locals[timeoutKey] = max;
             }
         });
+
     };
 };

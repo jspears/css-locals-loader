@@ -58,5 +58,21 @@ describe("css-locals-transitions", function () {
             expect(stuff['@enterTimeout']).toBe(4000);
         });
     });
+    it('@keyframes move_eye { from { margin-left:-20%; } to { margin-left:100%; }  }', function () {
+        var stuff = { enter:'enter'};
+        return postcss([transitions(stuff)]).process(`
+       .enter {
+              animation: 4s ease-in move_eyes;
+            }
+
+        @keyframes move_eye {
+            from { margin-left:-20%; }
+             to { margin-left:100%; }
+              }
+`).then(function () {
+            expect(stuff).toExist();
+         //   expect(stuff['@enterActiveMaxHeight']).toBe('max-height 1500 ease,opacity 1500 ease');
+        });
+    });
 
 });

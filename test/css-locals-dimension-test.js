@@ -2,6 +2,7 @@
 var expect = require('expect');
 var extractHeight = require('../src/css-locals-dimension');
 var postcss = require('postcss');
+
 describe('css-locals-dimension', function () {
 
 
@@ -96,7 +97,7 @@ describe('css-locals-dimension', function () {
         });
     });
 
-    it('should transition based destination height', function(){
+    it('should transition based destination height', function () {
         var stuff = {
             enter: 'Sx9h__fadeIn__enter',
             enterActive: '_2AwSa_fadeIn__enterActive'
@@ -115,5 +116,7 @@ describe('css-locals-dimension', function () {
 } `).then(function () {
             expect(stuff['@enterActiveMaxHeight']).toBe('max-height 1500 ease,opacity 1500 ease');
         });
-    })
+    });
+
+
 });
