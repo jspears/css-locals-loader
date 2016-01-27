@@ -16,7 +16,7 @@ describe('css-locals-dimension', function () {
             }
 
        `).then(function () {
-            expect(stuff['@enterHeight']).toBe(true);
+            expect(stuff['@enterHeight']).toBe('height 2000 ease');
         });
     });
     it('should extract height by property', function () {
@@ -30,7 +30,7 @@ describe('css-locals-dimension', function () {
             }
 
        `).then(function () {
-            expect(stuff['@enterHeight']).toBe(true);
+            expect(stuff['@enterHeight']).toBe('height 0');
         });
     });
 
@@ -42,14 +42,14 @@ describe('css-locals-dimension', function () {
         return postcss([extractHeight(stuff)]).process(`
             .no-enter {
               height:0;
-              transition: height  2s ease;
+              transition: height  2s ease, opacity 1s ease-in-out;
             }
             .no-enter-active {
               height:auto;
             }
 
        `).then(function () {
-            expect(stuff['@enterHeight']).toBe(true);
+            expect(stuff['@enterActiveHeight']).toBe('height 2000 ease');
         });
     });
 
@@ -62,13 +62,16 @@ describe('css-locals-dimension', function () {
             .no-enter {
               height:0;
               transition-property: opacity, height;
+              transition-duration:1s;
+              transition-delay:2s;
+              transition-timing-function:ease-in;
             }
             .no-enter-active {
               height:auto;
             }
 
        `).then(function () {
-            expect(stuff['@enterHeight']).toBe(true);
+            expect(stuff['@enterActiveHeight']).toBe("height 1000 ease-in 2000");
         });
     });
     it('should work with realish css', function () {
@@ -89,7 +92,28 @@ describe('css-locals-dimension', function () {
   transition: max-height 1.5s ease, opacity 1.5s ease;
   max-height: auto;
 } `).then(function () {
-            expect(stuff['@enterMaxHeight']).toBe(true);
+            expect(stuff['@enterActiveMaxHeight']).toBe('max-height 1500 ease');
         });
     });
+
+    it('should transition based destination height', function(){
+        var stuff = {
+            enter: 'Sx9h__fadeIn__enter',
+            enterActive: '_2AwSa_fadeIn__enterActive'
+        };
+
+        return postcss([extractHeight(stuff)]).process(`
+        .Sx9h__fadeIn__enter {
+  opacity: 0.01;
+  transition: max-height 1.5s ease, opacity 1.5s ease;
+  max-height: 0;
+}
+._2AwSa_fadeIn__enterActive {
+  overflow: hidden;
+  opacity: 1;
+  max-height: auto;
+} `).then(function () {
+            expect(stuff['@enterActiveMaxHeight']).toBe('max-height 1500 ease');
+        });
+    })
 });

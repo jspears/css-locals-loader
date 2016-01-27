@@ -1,67 +1,84 @@
 "use strict";
-
-var list = require('postcss').list;
-
+var transition = require('./transition');
+var utils = require('./utils');
 function isDimension(prop) {
     return /(?:(max|min)-)?(height|width)/.test(prop);
 }
-function camel(prop) {
-    return prop.replace(/-([\w])/g, function (match, r) {
-        return r.toUpperCase();
-    });
-}
+
 module.exports = function (locals) {
 
-    var classMap = ['enter', 'appear', 'leave'].reduce(function (ret, key) {
+    var classMap = ['enter', 'enterActive', 'appear', 'appearActive', 'leave', 'leaveActive'].reduce(function (ret, key) {
         if (key in locals) {
             ret[locals[key]] = key;
-        }
-        if (key + 'Active' in locals) {
-            ret[locals[key + 'Active']] = key;
         }
         return ret;
     }, {});
 
-    var re = new RegExp(Object.keys(classMap).join('|'));
+    var re = new RegExp(Object.keys(classMap).filter(function (v) {
+        return !/Active$/.test(v);
+    }).join('|'));
 
-
+    /**
+     * Two cases
+     *
+     * Transition X to auto.
+     * .enter {
+     *  transition:height 1s ease;
+     *  height:0<-- fine.
+     * }
+     * .enterActive {
+     *   height:auto; <-- this triggers height auto
+     * }
+     * adds
+     * \@enterActiveHeight = 'height 1s ease';
+     *
+     * Transition from auto to X.
+     * .enter {
+     *  transition:height 1s ease;
+     *  height:auto;<-- this triggers height auto
+     * }
+     * .enterActive {
+     *  height:0;
+     * }
+     * \@enterHeight = 'height 1s ease';
+     */
     return function extractDimensions$return(css, result) {
         css.walkRules(re, function (s) {
             var selectorName = s.selector.replace(/^\./, '');
             var prop = classMap[selectorName];
+            var trans = transition();
+            s.walkDecls(/^transition.*/, function (node) {
+                trans[node.prop](node.value);
+            });
+            var desc = trans.description();
+            trans.property().forEach(function (propname, i) {
+                if (!/(?:(max|min)-)?(height|width)/.test(propname)) {
+                    return;
 
-            function updateAutoProperty(c, decl, decend) {
-                var heightKey = '@' + camel(prop + '-' + decl);
-                var found = false;
-                c.walkDecls(decl, function (h) {
-                    if (h.value === 'auto') {
-                        found = locals[heightKey] = true;
-                    }
-                });
-                if (!decend && !found) {
-                    css.walkRules('.' + locals[prop + 'Active'], function (r) {
-                        found = updateAutoProperty(r, decl, true)
-                    });
                 }
-                return found;
-            }
+                console.log('prop', propname, desc[i]);
 
-            s.walkDecls('transition', function (t) {
-                list.comma(t.value).forEach(function (v) {
-                    var parts = list.space(v);
-                    if (isDimension(parts[0])) {
-                        updateAutoProperty(s, parts[0])
+                var found = false;
+
+                s.walkDecls(propname, function (node) {
+                    if (node.value === 'auto') {
+                        //from auto.
+                        found = true;
+                        locals['@' + utils.camel(prop + '-' + propname)] = desc[i];
                     }
                 });
+                var activeProp = locals[prop + 'Active'];
+                if (!found && activeProp)
+                    css.walkRules('.'+activeProp, function (activeRule) {
+                        activeRule.walkDecls(propname, function (d) {
+                            if (d.value === 'auto') {
+                                //to auto
+                                locals['@' + utils.camel(prop + '-active-' + propname)] = desc[i];
+                            }
+                        });
+                    });
             });
 
-            s.walkDecls('transition-property', function (t) {
-                list.comma(t.value).forEach(function (v) {
-                    if (isDimension(v)) {
-                        updateAutoProperty(s, v)
-                    }
-                });
-            });
         });
     };
 };

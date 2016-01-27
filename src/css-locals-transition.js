@@ -1,7 +1,8 @@
 "use strict";
-var tp = require('./transition-parser');
+var tp = require('./utils');
 var DEF_SELECTORS = ['enter', 'leave', 'appear', 'enterActive', 'leaveActive', 'appearActive'];
-
+var transition = require('./transition');
+var animation  = require('./animation');
 
 module.exports = function cssLocalsTransition(locals, selectors) {
 
@@ -21,34 +22,18 @@ module.exports = function cssLocalsTransition(locals, selectors) {
 
     return function cssLocalsTransition$postCssPlugin(css, result) {
         css.walkRules(re, function (s) {
-            var timeoutKey = selectorsMap[s.selector.replace(/^\./, '')], delay = null, duration = null, total = locals[timeoutKey] || 0;
+            var timeoutKey = selectorsMap[s.selector.replace(/^\./, '')];
+            var trans = transition(), anim = animation();
 
-            s.walkDecls('transition', function (t) {
-                total = Math.max(total, tp.calcMax(t.value))
+            s.walkDecls(/^transition.*/, function (node) {
+                trans[node.prop](node.value);
             });
 
-            s.walkDecls('transition-duration', function (d) {
-                duration = d.value
+            s.walkDecls(/^animation.*/, function (node) {
+                anim[node.prop](node.value)
             });
 
-            s.walkDecls('transition-delay', function (d) {
-                delay = d.value
-            });
-
-            s.walkDecls('animation', function (a) {
-                total = Math.max(total, tp.calcMaxAnim(a.value))
-            });
-
-            s.walkDecls('animation-delay', function (a) {
-                delay = a.value
-            });
-
-            s.walkDecls('animation-duration', function (a) {
-                duration = a.value
-            });
-
-
-            var max = Math.max(tp.maxLongForm(delay, duration), total);
+            var max = Math.max(anim.timeout(), trans.timeout());
             if (max > 0) {
                 locals[timeoutKey] = max;
             }

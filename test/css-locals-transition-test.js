@@ -10,6 +10,7 @@ describe("css-locals-transitions", function () {
         };
         return postcss([transitions(stuff)]).process(`
             .enter {
+              transition-property:stuff;
               transition-duration:1000ms, 10ms, 3.8s;
               transition-delay:2s,3.7s,200ms;
             }
@@ -41,7 +42,7 @@ describe("css-locals-transitions", function () {
               animation: 3s ease-in 1s 2 reverse both paused slidein;
             }
         `).then(function () {
-            expect(stuff['@enterTimeout']).toBe(4000);
+            expect(stuff['@enterTimeout']).toBe(8000);
         });
     });
 
