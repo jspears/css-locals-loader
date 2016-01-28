@@ -11,7 +11,7 @@ module.exports = function cssLocalsTransition(locals, opts) {
 
     var localOpts = opts['transition'] || utils.EMPTY_OBJ;
     var updateLocal = localOpts.updateLocal || opts.localUpdate || utils.localUpdate;
-    var selectors = localOpts.selectors || opts.selectors || DEF_SELECTORS;
+    var selectors = localOpts.selectors || opts.selectors || utils.selectors;
 
     var selectorsMap = Object.keys(locals).filter(function (key) {
         //only selectors we care about.
@@ -22,7 +22,7 @@ module.exports = function cssLocalsTransition(locals, opts) {
     }, {});
 
     // Work with options here
-    var re = new RegExp('^(\\.'+(Object.keys(selectorsMap).join('|\\.'))+')$')
+    var re = utils.classToRegexp(Object.keys(selectorsMap));
 
     return function cssLocalsTransition$postCssPlugin(css, result) {
         css.walkRules(re, function (s) {

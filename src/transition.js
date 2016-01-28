@@ -73,7 +73,7 @@ function Transition(trans) {
     };
 
     this.toString = function () {
-        return `transition: ${this.description().join(', ')}`;
+        return 'transition: ' + (this.description().join(', '));
     };
 
 
@@ -166,7 +166,7 @@ Transition.fromJSON = function (obj) {
 
     obj.forEach(function (o) {
         Object.keys(o).forEach(function (key) {
-            var f = key.replace(/^transition(.)/, function (match, letter) {
+            var f = key.replace(/^transition([A-Z])/, function (match, letter) {
                 return letter.toLowerCase();
             });
             transition[f](o[key]);

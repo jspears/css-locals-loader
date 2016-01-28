@@ -5,15 +5,13 @@ function isDimension(prop) {
     return /(?:(max|min)-)?(height|width)/.test(prop);
 }
 
-var DEF_SELECTORS = ['enter', 'enterActive', 'appear', 'appearActive', 'leave', 'leaveActive'];
-
-module.exports = function (locals, opts) {
+module.exports = function cssLocalsDimension(locals, opts) {
     opts = opts || utils.EMPTY_OBJ;
     var localOpts = opts['dimension'] || utils.EMPTY_OBJ;
 
     var updateLocal = localOpts.updateLocal || opts.localUpdate || utils.localUpdate;
 
-    var selectors = localOpts.selectors || opts.selectors || DEF_SELECTORS;
+    var selectors = localOpts.selectors || opts.selectors || utils.selectors;
 
     var classMap = selectors.reduce(function (ret, key) {
         if (key in locals) {
@@ -22,9 +20,7 @@ module.exports = function (locals, opts) {
         return ret;
     }, {});
 
-    var re = new RegExp(Object.keys(classMap).filter(function (v) {
-        return !/Active$/.test(v);
-    }).join('|'));
+    var re = utils.classToRegexp(Object.keys(classMap));
 
     /**
      * Two cases
