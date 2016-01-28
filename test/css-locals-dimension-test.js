@@ -119,5 +119,46 @@ describe('css-locals-dimension', function () {
         });
     });
 
+    it('should work with all', function() {
+        var stuff = {
+            enter:'Sx9h__fadeIn__enter',
+            enterActive:'_2AwSa_fadeIn__enterActive',
+            leave:'_2Zxjj_fadeIn__leave',
+            leaveActive:'_3MZh6_fadeIn__leaveActive',
+            appear:'vOfRv_fadeIn__appear',
+            appearActive:'_2ybIy_fadeIn__appearActive'
+        };
+        return postcss([extractHeight(stuff)]).process(`.Sx9h__fadeIn__enter {
+  opacity: 0.01;
+  height: 0;
+  transition: height 1.5s ease, opacity 1.5s ease;
 
+}
+._2AwSa_fadeIn__enterActive {
+  opacity: 1;
+  height: auto;
+}
+._2Zxjj_fadeIn__leave {
+  opacity: 1;
+  transition: height 1.5s ease, opacity 1.5s ease;
+  height: auto;
+}
+._3MZh6_fadeIn__leaveActive {
+  opacity: 0.01;
+  height: 0;
+}
+.vOfRv_fadeIn__appear {
+  transition: height 1.5s ease, opacity 1.5s ease;
+  opacity: 0.01;
+  height: 0;
+}
+._2ybIy_fadeIn__appearActive {
+  opacity: 1;
+  height: auto;
+}`).then(function(){
+            expect(stuff['@leaveHeight']).toExist();
+            expect(stuff['@apperActiveHeight']).toExist();
+            expect(stuff['@enterActiveHeight']).toExist();
+        })
+    });
 });

@@ -15,7 +15,6 @@ describe("css-locals-transitions", function () {
               transition-delay:2s,3.7s,200ms;
             }
         `).then(function () {
-            console.log(JSON.stringify(stuff, null,2));
             expect(stuff['@enterTimeout']).toBe(4000);
         });
     });
