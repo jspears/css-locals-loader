@@ -1,6 +1,6 @@
 "use strict";
 var utils = require('./utils');
-var DEF_SELECTORS = ['enter', 'leave', 'appear', 'enterActive', 'leaveActive', 'appearActive'];
+var DEF_SELECTORS = ['enter', 'leave', 'appear'];
 var transition = require('./transition');
 var animation = require('./animation');
 
@@ -22,7 +22,7 @@ module.exports = function cssLocalsTransition(locals, opts) {
     }, {});
 
     // Work with options here
-    var re = new RegExp(Object.keys(selectorsMap).join('|'));
+    var re = new RegExp('^(\\.'+(Object.keys(selectorsMap).join('|\\.'))+')$')
 
     return function cssLocalsTransition$postCssPlugin(css, result) {
         css.walkRules(re, function (s) {
