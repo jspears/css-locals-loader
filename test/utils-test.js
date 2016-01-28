@@ -20,14 +20,18 @@ describe("utils", function () {
 
     describe('#toNiceTimeUnits', function () {
         var map = {
-            '1000': '1s',
+            '1.5s': '1.5s',
             '100': 100,
             '10': 10,
             '100ms': 100,
+            '1000': '1s',
+
+
             '.0010s': 1,
             '3000': '3s',
-            '21232.22ms':21232.22,
-            '1.234s':1234,
+
+            '21232.22ms': 21232.22,
+            '1.234s': 1234,
             //if the transformed length is the same as the original length return the original.
             '3.4s': '3.4s',
             '30.00': 30,

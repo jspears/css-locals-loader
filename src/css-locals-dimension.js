@@ -71,7 +71,7 @@ module.exports = function cssLocalsDimension(locals, opts) {
                 var activeProp = locals[prop + 'Active'];
                 //so its a to auto.
                 if (!found && activeProp) {
-                    css.walkRules('.' + activeProp, function (activeRule) {
+                    css.walkRules(utils.classToRegexp([activeProp]), function (activeRule) {
                         activeRule.walkDecls(propname, function (d) {
                             if (d.value === 'auto') {
                                 //to auto

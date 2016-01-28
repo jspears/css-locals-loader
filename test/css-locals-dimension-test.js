@@ -119,7 +119,7 @@ describe('css-locals-dimension', function () {
         });
     });
 
-    it('should work with all', function() {
+    it('should work with appear/enter/leave', function() {
         var stuff = {
             enter:'Sx9h__fadeIn__enter',
             enterActive:'_2AwSa_fadeIn__enterActive',
@@ -156,9 +156,30 @@ describe('css-locals-dimension', function () {
   opacity: 1;
   height: auto;
 }`).then(function(){
-            expect(stuff['@leaveHeight']).toExist('leave');
+            expect(stuff['@leaveHeight']).toBe('height 1500 ease,opacity 1500 ease');
             expect(stuff['@appearActiveHeight']).toExist('active');
             expect(stuff['@enterActiveHeight']).toExist('enter');
         })
+    });
+    it('should work with nested', function(){
+        var stuff = {
+            appear:'_2EQ4__grow__appear',
+            appearActive:'_1oQAE_grow__appearActive'
+        };
+        postcss([extractHeight(stuff)]).process(`
+
+        ._2EQ4__grow__appear {
+  transition: height 1s ease, width 1s ease;
+  height: 0;
+  width: 0;
+}
+._2EQ4__grow__appear._1oQAE_grow__appearActive {
+  height: auto;
+  width: auto;
+}
+        `).then(function(){
+            expect(stuff['@appearActiveHeight']).toExist();
+            expect(stuff['@appearActiveWidth']).toExist();
+        });
     });
 });

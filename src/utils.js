@@ -6,7 +6,7 @@ var api = {
     EMPTY_OBJ: Object.freeze({}),
     selectors: ['enter', 'appear', 'leave'],
     classToRegexp(classes){
-        return new RegExp('^(\\.' + (classes.join('|\\.')) + ')$');
+        return new RegExp('(\\.' + (classes.join('|\\.')) + ')');
     },
     /**
      * Default locals update function.
@@ -40,16 +40,31 @@ var api = {
         arr.push(value);
         return arr;
     },
+    /**
+     * tries to convert from s/ms to seconds.
+     * If the seconds representation is shorter than
+     * return it.  Otherwise return milliseconds or
+     * the original value whichever is shorter.
+     *
+     * It will also  drop insignificant zeros.
+     *
+     * @param oval
+     * @returns {*}
+     */
     toNiceTimeUnits(oval){
         var val = api.toMillis(oval);
         if (val === 0) {
             return val;
         }
-        var nval = ('' + (val / 1000)).replace(/^0{1,}/, '');
-        if ((nval.length + 1) < ('' + val).length) {
-            return nval + 's';
+        var sval = ('' + (val / 1000)).replace(/^0{1,}/, '') + 's';
+        oval = '' + oval;
+        val = '' + val;
+        if (sval.length < oval.length){
+            return val.length <= sval.length ? val : sval;
+        }else{
+            return val.length < oval.length?  val : oval;
         }
-        return ('' + val).length === ('' + oval).length ? oval : val;
+
     },
     replaceMillis(to, value) {
         if (typeof value === 'number') {
