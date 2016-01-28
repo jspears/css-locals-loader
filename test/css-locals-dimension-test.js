@@ -156,9 +156,9 @@ describe('css-locals-dimension', function () {
   opacity: 1;
   height: auto;
 }`).then(function(){
-            expect(stuff['@leaveHeight']).toExist();
-            expect(stuff['@apperActiveHeight']).toExist();
-            expect(stuff['@enterActiveHeight']).toExist();
+            expect(stuff['@leaveHeight']).toExist('leave');
+            expect(stuff['@appearActiveHeight']).toExist('active');
+            expect(stuff['@enterActiveHeight']).toExist('enter');
         })
     });
 });
