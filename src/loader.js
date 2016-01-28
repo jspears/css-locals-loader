@@ -11,7 +11,7 @@ module.exports = function (source, map) {
 
     var query = typeof this.query === 'string' ?  loaderUtils.parseQuery(this.query) : this.query;
 
-    var cssLocalPlugins = this.options && this.options.cssLocals && this.options.cssLocals.length
+    var cssLocalPlugins = this.options && this.options.cssLocals
         ? this.options.cssLocals : [require('./css-locals-transition')];
 
     var lines = source.split('\n');
