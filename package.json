@@ -1,6 +1,6 @@
 {
   "name": "css-locals-loader",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "Webpack loader to add more locals to your css modules. ",
   "main": "index.js",
   "directories": {
@@ -17,7 +17,6 @@
   "publishConfig": {
     "registry": "https://registry.npmjs.org"
   },
-
   "keywords": [
     "css-loader",
     "locals",
