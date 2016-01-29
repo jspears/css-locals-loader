@@ -155,7 +155,10 @@ describe('css-locals-dimension', function () {
 ._2ybIy_fadeIn__appearActive {
   opacity: 1;
   height: auto;
-}`).then(function(){
+}`).then(function(css){
+            css = ""+css;
+            console.log(css+'');
+
             expect(stuff['@leaveHeight']).toBe('height 1500 ease,opacity 1500 ease');
             expect(stuff['@appearActiveHeight']).toExist('active');
             expect(stuff['@enterActiveHeight']).toExist('enter');
@@ -181,5 +184,37 @@ describe('css-locals-dimension', function () {
             expect(stuff['@appearActiveHeight']).toExist();
             expect(stuff['@appearActiveWidth']).toExist();
         });
+    });
+
+
+    it('should work with rewrite tos', function() {
+        var stuff = {
+            enter:'Sx9h__fadeIn__enter',
+            enterActive:'_2AwSa_fadeIn__enterActive',
+            leave:'_2Zxjj_fadeIn__leave',
+            leaveActive:'_3MZh6_fadeIn__leaveActive',
+            appear:'vOfRv_fadeIn__appear',
+            appearActive:'_2ybIy_fadeIn__appearActive'
+        };
+        //height gets converted to 100% so the transition will work nicely.
+        //add a max-height:100% gets set to constrain height
+        return postcss([extractHeight(stuff)]).process(`
+._2Zxjj_fadeIn__leave {
+  opacity: 1;
+  transition: height 1.5s ease, opacity 1.5s ease;
+  height: auto;
+}
+._3MZh6_fadeIn__leaveActive {
+  opacity: 0.01;
+  height: 0;
+}
+`).then(function(css){
+            css = ""+css;
+            expect(css).toMatch(/height:\s*100%/, 'height: 100%');
+
+            console.log(css+'');
+
+            expect(stuff['@leaveHeight']).toBe('height 1500 ease,opacity 1500 ease');
+        })
     });
 });

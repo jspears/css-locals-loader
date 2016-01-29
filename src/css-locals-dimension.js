@@ -60,10 +60,15 @@ module.exports = function cssLocalsDimension(locals, opts) {
                 }
                 var found = false;
 
-                s.walkDecls(propname, function (node) {
-                    if (node.value === 'auto') {
+                s.walkDecls(propname, function (decl) {
+                    if (decl.value === 'auto') {
                         //from auto.
                         found = true;
+                       // decl.value === '100%';
+           //             decl.cloneBefore({ prop: 'max-'+propname, value: '100%' });
+                        decl.cloneBefore({ prop:decl.prop, value:'100%'})
+                        decl.remove();
+//                        const max = new Declaration({ prop: 'color', value: 'black' });
                         updateLocal(locals, prop, propname, trans.description().join(','));
                     }
                 });
