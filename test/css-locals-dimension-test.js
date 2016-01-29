@@ -50,7 +50,6 @@ describe('css-locals-dimension', function () {
             }
 
        `).then(function () {
-            console.log(JSON.stringify(stuff, null,2));
             expect(stuff['@enterActiveHeight']).toBe('height 2s ease,opacity 1s ease-in-out');
         });
     });
@@ -157,8 +156,6 @@ describe('css-locals-dimension', function () {
   height: auto;
 }`).then(function(css){
             css = ""+css;
-            console.log(css+'');
-
             expect(stuff['@leaveHeight']).toBe('height 1500 ease,opacity 1500 ease');
             expect(stuff['@appearActiveHeight']).toExist('active');
             expect(stuff['@enterActiveHeight']).toExist('enter');
@@ -211,8 +208,6 @@ describe('css-locals-dimension', function () {
 `).then(function(css){
             css = ""+css;
             expect(css).toMatch(/height:\s*100%/, 'height: 100%');
-
-            console.log(css+'');
 
             expect(stuff['@leaveHeight']).toBe('height 1500 ease,opacity 1500 ease');
         })

@@ -9,31 +9,39 @@ module.exports = function (source, map) {
         this.cacheable();
     }
 
-    var query = typeof this.query === 'string' ?  loaderUtils.parseQuery(this.query) : this.query;
+    var query = typeof this.query === 'string' ? loaderUtils.parseQuery(this.query) : this.query;
 
     var cssLocalPlugins = this.options && this.options.cssLocals
         ? this.options.cssLocals : [require('./css-locals-transition')];
 
-    var lines = source.split('\n');
-
-    var css = "";
 
     var exports = {
         push(id){
-            css = id[1];
+            this.css = id[1];
         },
         locals: {}
     };
 
     var callback = this.async();
 
+    var fakeRequire = function (_mod) {
+        exports.mod = _mod;
+        return function () {
+            return exports;
+        }
+    };
+
+    var _module = {};
+
     //yeah, I know should use child compiler, but damn that is a lot of work.
-    (new Function(['exports', 'module'], lines.slice(1).join('\n'))(exports, {}));
+    (new Function(['exports', 'module', 'require'], source))(null, _module, fakeRequire);
 
-    postcss(localsLoad(cssLocalPlugins, exports.locals, query)).process(css, {}).then(function () {
+    postcss(localsLoad(cssLocalPlugins, exports.locals, query)).process(exports.css).then(function (result) {
 
-        var str = lines.slice(0, lines.indexOf('// exports')).join('\n');
-        str += '// exports\nexports.locals = ' + JSON.stringify((exports.locals), null, 2) + ';';
+        var str = 'exports = module.exports = require(' + JSON.stringify(exports.mod) + ')();\n\n';
+        str += '// imports\n\n';
+        str += 'exports.push([module.id, ' + JSON.stringify(result + '') + ', ""]);\n\n';
+        str += '// exports\nexports.locals = ' + (exports.locals ? JSON.stringify(exports.locals) : null) + ';';
         callback(null, str);
     }).catch(callback);
 };
