@@ -2,10 +2,7 @@
 
 var expect = require('expect');
 var loader = require('../');
-
-describe('css-locals-loader', function () {
-    it('should load this', function (done) {
-        var src = `exports = module.exports = require("./../../node_modules/css-loader/lib/css-base.js")();
+var src = `exports = module.exports = require("./../../node_modules/css-loader/lib/css-base.js")();
 // imports
 
 
@@ -22,6 +19,9 @@ exports.locals = {
 	"leaveActive": "_1YqMH_grow__leaveActive"
 };
     `
+
+describe('css-locals-loader', function () {
+    it('should work with mixed array of things', function () {
         var lu = false, cacheable = false;
 
         function localUpdate() {
@@ -34,15 +34,18 @@ exports.locals = {
             },
             query: '',
             options: {
-                cssLocals: {
-                    'css-locals-dimension': {
-                        localUpdate
+                cssLocals: [
+                    {
+                        'css-locals-dimension': {
+                            localUpdate
+                        }
                     },
-                    'css-locals-transition': null
-                }
+                    'css-locals-transition'
+                ]
             },
             async(){
                 return function (err, value) {
+                    expect(err).toNotExist();
                     expect(value).toExist();
                     expect(lu).toBe(true);
                     expect(cacheable).toBe(true);
@@ -50,5 +53,5 @@ exports.locals = {
                 }
             }
         }, src, {});
-    })
+    });
 });

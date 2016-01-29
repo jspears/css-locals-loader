@@ -28,4 +28,19 @@ describe('locals-load', function () {
         expect(f[0].name).toBe('extractDimensions$return');
         expect(f[1].name).toBe('cssLocalsTransition$postCssPlugin');
     });
+    it('should allow mixed array, object', function(){
+        var f = localsLoad( [
+            {
+                'css-locals-dimension': {
+                    localUpdate(){
+
+                    }
+                }
+            },
+            'css-locals-transition'
+        ], {});
+        expect(f.length).toBe(2);
+        expect(f[0].name).toBe('extractDimensions$return');
+        expect(f[1].name).toBe('cssLocalsTransition$postCssPlugin');
+    });
 });
